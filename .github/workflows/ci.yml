@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate package.json
+        run: |
+          if [ ! -f "package.json" ]; then
+            echo "Error: package.json not found"
+            exit 1
+          fi
+          jq empty package.json
+          echo "✓ package.json is valid JSON"
+
+      - name: Check required fields
+        run: |
+          NAME=$(jq -r '.name' package.json)
+          VERSION=$(jq -r '.version' package.json)
+          UNITY=$(jq -r '.unity' package.json)
+
+          if [ "$NAME" = "null" ] || [ "$VERSION" = "null" ] || [ "$UNITY" = "null" ]; then
+            echo "Error: Missing required fields in package.json"
+            exit 1
+          fi
+
+          echo "Package: $NAME"
+          echo "Version: $VERSION"
+          echo "Unity: $UNITY"
+          echo "✓ All required fields present"
+
+      - name: Validate assembly definitions
+        run: |
+          for asmdef in $(find . -name "*.asmdef"); do
+            jq empty "$asmdef" || { echo "Invalid: $asmdef"; exit 1; }
+            echo "✓ $asmdef"
+          done

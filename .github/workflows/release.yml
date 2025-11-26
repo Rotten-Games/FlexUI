@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Verify package.json version matches tag
+        run: |
+          PKG_VERSION=$(jq -r '.version' package.json)
+          if [ "$PKG_VERSION" != "${{ steps.version.outputs.VERSION }}" ]; then
+            echo "Error: package.json version ($PKG_VERSION) doesn't match tag (${{ steps.version.outputs.VERSION }})"
+            exit 1
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          body: |
+            ## Installation
+
+            **Via Git URL:**
+            ```bash
+            openupm add com.rottengames.flexui
+            ```
+
+            **Via OpenUPM:**
+            ```bash
+            openupm add com.rottengames.flexui
+            ```
