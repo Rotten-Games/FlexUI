@@ -29,6 +29,15 @@ namespace RottenGames.FlexUI
             return element;
         }
 
+        public static T WithPadding<T>(this T element, float top, float right, float bottom, float left) where T : VisualElement
+        {
+            element.style.paddingTop = top;
+            element.style.paddingRight = right;
+            element.style.paddingBottom = bottom;
+            element.style.paddingLeft = left;
+            return element;
+        }
+
         public static T WithMargin<T>(this T element, float all) where T : VisualElement
         {
             element.style.marginTop = all;
@@ -44,6 +53,15 @@ namespace RottenGames.FlexUI
             element.style.marginBottom = vertical;
             element.style.marginLeft = horizontal;
             element.style.marginRight = horizontal;
+            return element;
+        }
+
+        public static T WithMargin<T>(this T element, float top, float right, float bottom, float left) where T : VisualElement
+        {
+            element.style.marginTop = top;
+            element.style.marginRight = right;
+            element.style.marginBottom = bottom;
+            element.style.marginLeft = left;
             return element;
         }
 
