@@ -1,6 +1,6 @@
 {
   "name": "com.rottengames.flexui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "displayName": "FlexUI",
   "description": "A simplified, declarative API for Unity UI Toolkit. Build UI faster with intuitive builders, theming, and common patterns.",
   "unity": "6000.0",
